@@ -12,18 +12,18 @@ public:
 	~CryptoHandler();
 	QString randomStrGen(int length);
 	QString RSAEncryptString(QString publickeyfile,
-		QString message);
+							 QString message);
 	QString RSADecryptString(QString privatekeyfile,
-		QString ciphertext);
+							 QString ciphertext);
 	void EncryptFile(QString publickeyfile,
-		QString filetoencrypt,
-		QString encryptedfile);
+					 QString filetoencrypt,
+					 QString encryptedfile);
 	void DecryptFile(QString privatekeyfile,
-		QString filetodecrypt,
-		QString decryptedfile);
+					 QString filetodecrypt,
+					 QString decryptedfile);
 
 private:
-	
+
 };
 
 #endif // CRYPTOHANDLER_H
