@@ -3,8 +3,6 @@
 
 #include <cryptocpp\files.h>
 
-using namespace CryptoPP;
-
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
