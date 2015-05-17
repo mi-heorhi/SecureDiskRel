@@ -41,15 +41,16 @@ void Storage::out(QFile* fp, QString fileName)
 	fileInfo info;
 	fp->open(QIODevice::WriteOnly);
 	char* buf;
-	do
+	quint64 pos = 0;
+	while (_storage->seek(pos))
 	{
 		memset(&info, 0, sizeof(fileInfo));
 
-		_storage->read((char*)&info, info.length());
+		_storage->read((char*)&info, sizeof(fileInfo));
 		if (info.size == 0)
 			break;
 		else
-		{
+		{			
 			if (fileName == QString(info.name))
 			{
 				buf = new char[info.size];
@@ -57,10 +58,9 @@ void Storage::out(QFile* fp, QString fileName)
 				fp->write(buf, info.size);
 				delete[] buf;
 			}
-			_storage->seek(info.size);
+			pos += (info.size + sizeof(fileInfo));
 		}
 	}
-	while (!_storage->atEnd());
 	fp->close();
 }
 
@@ -68,20 +68,21 @@ QStringList Storage::getNames()
 {
 	QStringList fileList;
 	fileInfo info;
+	quint64 pos = 0;
 	_storage->seek(0);
-	do
+	while(_storage->seek(pos))
 	{
 		memset(&info, 0, sizeof(fileInfo));
 
-		_storage->read((char*)&info, info.size);
+		_storage->read((char*)&info, sizeof(fileInfo));
 		if (info.size == 0)
 			break;
 		else
 		{
-			fileList << QString(info.name);
-			_storage->seek(info.size);
+			fileList << QString(info.name);	
+			pos += (info.size + sizeof(fileInfo));
 		}
 	}
-	while (!_storage->atEnd());
+	
 	return fileList;
 }

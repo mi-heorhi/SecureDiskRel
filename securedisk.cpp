@@ -42,21 +42,18 @@ void SecureDisk::encryptFolder()
 
 void SecureDisk::decryptStorage()
 {
-	QString folderPath = "D:\\dev\\src\\SecureDisk\\test\\";//ui.folderPathLineEdit_2->text();
+	QString folderPath = "D:\\dev\\src\\SecureDisk\\out\\";//ui.folderPathLineEdit_2->text();
 	QString storagePath = "D:\\dev\\src\\SecureDisk\\out\\data.dat";// ui.storagePathLineEdit_2->text();
-
-	QDir directory(folderPath);
-	QStringList files = directory.entryList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden | QDir::AllDirs | QDir::Files, QDir::DirsFirst);
-
+	
 	Storage storage;
 
 	storage.open(storagePath);
-
+	QStringList files = storage.getNames();
 	for each (QString file in files)
 	{
 		QFile* fileHandler = new QFile(folderPath + file);
 		fileHandler->open(QIODevice::ReadOnly);
-		storage.put(fileHandler, file);
+		storage.out(fileHandler, file);
 		fileHandler->close();
 		delete fileHandler;
 	}
