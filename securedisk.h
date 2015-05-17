@@ -11,7 +11,9 @@ class SecureDisk : public QMainWindow
 public:
 	SecureDisk(QWidget *parent = 0);
 	~SecureDisk();
-
+private slots:
+    void encryptFolder();
+	void decryptStorage();
 private:
 	Ui::SecureDiskClass ui;
 };

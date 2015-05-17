@@ -21,7 +21,7 @@ struct fileInfo
 		int         sz = strlen(fileName);
 		while (*str != '\\' && sz--)
 			--str;
-		return str + 1;
+		return str;
 	}
 
 	int length(void) const
@@ -35,10 +35,10 @@ class Storage : public QObject
 	Q_OBJECT
 public:
 	explicit Storage(QObject *parent = 0);
-	QFile* open(QString password, QString path);
+	QFile* open(QString path);
 	void close();
 	void put(QFile* file, QString filename);
-	void out(QFile* fp);
+	void out(QFile* file, QString filename);
 	QStringList getNames();
 signals:
 

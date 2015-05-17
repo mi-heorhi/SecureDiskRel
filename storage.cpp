@@ -5,7 +5,7 @@ QObject(parent), _storage(new QFile())
 {
 }
 
-QFile* Storage::open(QString password, QString path)
+QFile* Storage::open(QString path)
 {
 	_storage = new QFile(path);
 	_storage->open(QIODevice::ReadWrite | QIODevice::Append);
@@ -36,7 +36,7 @@ void Storage::put(QFile* file, QString filename)
 	}
 }
 
-void Storage::out(QFile* fp)
+void Storage::out(QFile* fp, QString fileName)
 {
 	fileInfo info;
 	fp->open(QIODevice::WriteOnly);
@@ -50,7 +50,7 @@ void Storage::out(QFile* fp)
 			break;
 		else
 		{
-			if (fp->fileName() == QString(info.name))
+			if (fileName == QString(info.name))
 			{
 				buf = new char[info.size];
 				_storage->read(buf, info.size);
