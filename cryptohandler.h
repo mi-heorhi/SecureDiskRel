@@ -10,15 +10,15 @@ class CryptoHandler : public QObject
 public:
 	CryptoHandler(QObject *parent);
 	~CryptoHandler();
-	QString randomStrGen(int length);
-	QString RSAEncryptString(QString publickeyfile,
+	static QString randomStrGen(int length);
+	static QString RSAEncryptString(QString publickeyfile,
 							 QString message);
-	QString RSADecryptString(QString privatekeyfile,
+	static QString RSADecryptString(QString privatekeyfile,
 							 QString ciphertext);
-	void EncryptFile(QString publickeyfile,
+	static void EncryptFile(QString publickeyfile,
 					 QString filetoencrypt,
 					 QString encryptedfile);
-	void DecryptFile(QString privatekeyfile,
+	static void DecryptFile(QString privatekeyfile,
 					 QString filetodecrypt,
 					 QString decryptedfile);
 
