@@ -100,13 +100,11 @@
     <CustomBuild Include="keypathdialog.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_securedisk.h">
+    <CustomBuild Include="GeneratedFiles\ui_keypathdialog.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_keypathdialog.h">
+    </CustomBuild>
+    <CustomBuild Include="GeneratedFiles\ui_securedisk.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
+    </CustomBuild>
   </ItemGroup>
 </Project>
