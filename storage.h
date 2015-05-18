@@ -42,7 +42,7 @@ public:
 	QStringList getNames();
 signals:
 
-	public slots :
+public slots :
 private:
 	QFile* _storage;
 };
