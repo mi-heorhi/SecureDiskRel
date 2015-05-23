@@ -6,6 +6,7 @@ GenerateKey::GenerateKey(QWidget *parent)
 	ui.setupUi(this);
 
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+	connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(discart()));
 }
 
 GenerateKey::~GenerateKey()
@@ -61,4 +62,10 @@ void GenerateKey::SaveHex(const QString& filename, const BufferedTransformation&
 	encoder.MessageEnd();
 
 	Save(filename, encoder);
+}
+
+
+void GenerateKey::discart()
+{
+	close();
 }

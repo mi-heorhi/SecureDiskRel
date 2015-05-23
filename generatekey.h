@@ -28,6 +28,7 @@ private:
 	void SaveHex(const QString& filename, const BufferedTransformation& bt);
 private slots:
     void accept();
+	void discart();
 
 private:
 	Ui::GenerateKey ui;

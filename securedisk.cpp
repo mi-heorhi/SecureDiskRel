@@ -4,6 +4,7 @@
 #include "generatekey.h"
 
 #include <qdir.h>
+#include <qmessagebox.h>
 
 SecureDisk::SecureDisk(QWidget *parent)
 	: QMainWindow(parent)
@@ -45,6 +46,13 @@ void SecureDisk::encryptFolder()
 
 	CryptoHandler::EncryptFile(publickKeyPath, tempFile, storagePath);
 	QFile::remove(tempFile);
+
+	QFile::remove(tempFile);
+	QMessageBox msgBox;
+	msgBox.setText("Зашифрованно");
+	msgBox.setInformativeText("Зашифрованно хранилище");
+	msgBox.setStandardButtons(QMessageBox::Ok);
+	msgBox.exec();
 }
 
 void SecureDisk::decryptStorage()
@@ -68,6 +76,11 @@ void SecureDisk::decryptStorage()
 	}
 	storage.close();
 	QFile::remove(tempFile);
+	QMessageBox msgBox;
+	msgBox.setText("Расшифрованно");
+	msgBox.setInformativeText("Расшифрованно хранилище");
+	msgBox.setStandardButtons(QMessageBox::Ok);
+	msgBox.exec();
 }
 
 void SecureDisk::generateKeys()

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>803</width>
-    <height>499</height>
+    <height>253</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,11 +20,11 @@
       <x>20</x>
       <y>20</y>
       <width>771</width>
-      <height>461</height>
+      <height>201</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -35,8 +35,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>751</width>
-        <height>391</height>
+        <width>761</width>
+        <height>171</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -89,22 +89,16 @@
            </property>
           </widget>
          </item>
+         <item row="5" column="1">
+          <widget class="QPushButton" name="encryptPushButton">
+           <property name="text">
+            <string>Зашифровать</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
-     </widget>
-     <widget class="QPushButton" name="encryptPushButton">
-      <property name="geometry">
-       <rect>
-        <x>614</x>
-        <y>400</y>
-        <width>121</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Зашифровать</string>
-      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -116,8 +110,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>741</width>
-        <height>371</height>
+        <width>761</width>
+        <height>141</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -156,29 +150,23 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Путь к открытому ключу</string>
+            <string>Путь к закрытому ключу</string>
            </property>
           </widget>
          </item>
          <item row="3" column="1">
           <widget class="QLineEdit" name="privateKeyPathLineEdit"/>
          </item>
+         <item row="4" column="1">
+          <widget class="QPushButton" name="decryptPushButton">
+           <property name="text">
+            <string>Расшифровать</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
-     </widget>
-     <widget class="QPushButton" name="decryptPushButton">
-      <property name="geometry">
-       <rect>
-        <x>594</x>
-        <y>390</y>
-        <width>141</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Расшифровать</string>
-      </property>
      </widget>
     </widget>
    </widget>

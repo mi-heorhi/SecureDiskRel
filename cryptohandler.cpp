@@ -1,14 +1,14 @@
 #include "cryptohandler.h"
 
-#include "cryptocpp\config.h"
 #include "cryptocpp\cryptlib.h"
 #include "cryptocpp\default.cpp"
 #include "cryptocpp\files.h"
 #include "cryptocpp\rsa.h"
 #include "cryptocpp\randpool.h"
 #include "cryptocpp\hex.h"
-#include <cryptocpp\osrng.h>
-#include <cryptocpp\modes.h>
+#include "cryptocpp\osrng.h"
+
+#include <QMessageBox>
 
 using namespace CryptoPP;
 
@@ -50,7 +50,6 @@ string CryptoHandler::RSAEncryptString(string publickeyfile,
 	FileSource pubFile(publickeyfile.c_str(), true, new HexDecoder());
 	RSAES_OAEP_SHA_Encryptor pub(pubFile);
 	RandomPool randPool;
-	//randPool.Put((byte *)seed.c_str(), strlen(seed.c_str()));
 	randPool.IncorporateEntropy((byte *)seed.c_str(),
 								strlen(seed.c_str()));
 
@@ -80,46 +79,68 @@ void CryptoHandler::EncryptFile(QString publickeyfile,
 								QString filetoencrypt,
 								QString encryptedfile)
 {
-	// Generate passphrase
-	string passphrase = randomStrGen(50);
-	string encrypted_passphrase = RSAEncryptString(publickeyfile.toStdString(),
-												   passphrase);
+	try
+	{
+		// Generate passphrase
+		string passphrase = randomStrGen(50);
+		string encrypted_passphrase = RSAEncryptString(publickeyfile.toStdString(),
+													   passphrase);
 
-	// Encrypt the file and save encrypted data to the string
-	string data;
-	FileSource f(filetoencrypt.toStdString().c_str(), true,
-				 new DefaultEncryptorWithMAC(
-				 passphrase.c_str(),
-				 new HexEncoder(new StringSink(data))));
+		// Encrypt the file and save encrypted data to the string
+		string data;
+		FileSource f(filetoencrypt.toStdString().c_str(), true,
+					 new DefaultEncryptorWithMAC(
+					 passphrase.c_str(),
+					 new HexEncoder(new StringSink(data))));
 
-	// Append encrypted passphrase to the beginning of the string
-	data = encrypted_passphrase + data;
+		// Append encrypted passphrase to the beginning of the string
+		data = encrypted_passphrase + data;
 
-	// Save string to the file
-	StringSource ss(data.c_str(), true,
-					new FileSink(encryptedfile.toStdString().c_str()));
+		// Save string to the file
+		StringSource ss(data.c_str(), true,
+						new FileSink(encryptedfile.toStdString().c_str()));
+	}
+	catch (CryptoPP::Exception e)
+	{
+		QMessageBox msgBox;
+		msgBox.setText("Error");
+		msgBox.setInformativeText(e.what());
+		msgBox.setStandardButtons(QMessageBox::Ok);
+		msgBox.exec();
+	}
 }
 
 void CryptoHandler::DecryptFile(QString privatekeyfile,
 								QString filetodecrypt,
 								QString decryptedfile)
 {
-	// Read string from file
-	std::string data;
-	FileSource ff(filetodecrypt.toStdString().c_str(), true, new StringSink(data));
+	try
+	{
+		// Read string from file
+		std::string data;
+		FileSource ff(filetodecrypt.toStdString().c_str(), true, new StringSink(data));
 
-	// Grab passphrase from the string
-	string encrypted_passphrase = data.substr(0, 256);
-	encrypted_passphrase.resize(256);
-	string passphrase = RSADecryptString(privatekeyfile.toStdString(),
-										 encrypted_passphrase);
+		// Grab passphrase from the string
+		string encrypted_passphrase = data.substr(0, 256);
+		encrypted_passphrase.resize(256);
+		string passphrase = RSADecryptString(privatekeyfile.toStdString(),
+											 encrypted_passphrase);
 
-	// Grab cipher from the string
-	std::string cipher = data.substr(256, data.length()).c_str();
+		// Grab cipher from the string
+		std::string cipher = data.substr(256, data.length()).c_str();
 
-	// Decrypt string and save to file
-	StringSource s(cipher.c_str(), true,
-				   new HexDecoder(new DefaultDecryptorWithMAC(
-				   passphrase.c_str(),
-				   new FileSink(decryptedfile.toStdString().c_str()))));
+		// Decrypt string and save to file
+		StringSource s(cipher.c_str(), true,
+					   new HexDecoder(new DefaultDecryptorWithMAC(
+					   passphrase.c_str(),
+					   new FileSink(decryptedfile.toStdString().c_str()))));
+	}
+	catch (CryptoPP::Exception e)
+	{
+		QMessageBox msgBox;
+		msgBox.setText("Error");
+		msgBox.setInformativeText(e.what());
+		msgBox.setStandardButtons(QMessageBox::Ok);
+		msgBox.exec();
+	}
 }
