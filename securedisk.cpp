@@ -29,30 +29,36 @@ void SecureDisk::encryptFolder()
 	QString tempFile = folderPath + "\\" + "temp.dat";
 	QDir directory(folderPath);
 	QStringList files = directory.entryList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden | QDir::AllDirs | QDir::Files, QDir::DirsFirst);
-
-	Storage storage;
-
-	storage.open(tempFile);
-
-	for each (QString file in files)
+	if (!folderPath.isEmpty() && !storagePath.isEmpty() && !publickKeyPath.isEmpty())
 	{
-		QFile* fileHandler = new QFile(folderPath + "\\" + file);
-		fileHandler->open(QIODevice::ReadOnly);
-		storage.put(fileHandler, file);
-		fileHandler->close();
-		delete fileHandler;
+		Storage storage;
+
+		storage.open(tempFile);
+
+		for each (QString file in files)
+		{
+			QFile* fileHandler = new QFile(folderPath + "\\" + file);
+			fileHandler->open(QIODevice::ReadOnly);
+			storage.put(fileHandler, file);
+			fileHandler->close();
+			delete fileHandler;
+		}
+		storage.close();
+
+		CryptoHandler::EncryptFile(publickKeyPath, tempFile, storagePath);
+		QFile::remove(tempFile);
+
+		QFile::remove(tempFile);
+
 	}
-	storage.close();
-
-	CryptoHandler::EncryptFile(publickKeyPath, tempFile, storagePath);
-	QFile::remove(tempFile);
-
-	QFile::remove(tempFile);
-	QMessageBox msgBox;
-	msgBox.setText("Зашифрованно");
-	msgBox.setInformativeText("Зашифрованно хранилище");
-	msgBox.setStandardButtons(QMessageBox::Ok);
-	msgBox.exec();
+	else
+	{
+		QMessageBox msgBox;
+		msgBox.setText("Error");
+		msgBox.setInformativeText("Path can't be empty");
+		msgBox.setStandardButtons(QMessageBox::Ok);
+		msgBox.exec();
+	}
 }
 
 void SecureDisk::decryptStorage()
@@ -61,26 +67,32 @@ void SecureDisk::decryptStorage()
 	QString storagePath = ui.storagePathLineEdit_2->text();
 	QString privateKeyPath = ui.privateKeyPathLineEdit->text();
 	QString tempFile = folderPath + "\\temp.dat";
-	CryptoHandler::DecryptFile(privateKeyPath, storagePath, tempFile);
-	Storage storage;
-
-	storage.open(tempFile);
-	QStringList files = storage.getNames();
-	for each (QString file in files)
+	if (!folderPath.isEmpty() && !storagePath.isEmpty() && !storagePath.isEmpty() && !privateKeyPath.isEmpty())
 	{
-		QFile* fileHandler = new QFile(folderPath + "\\" + file);
-		fileHandler->open(QIODevice::ReadOnly);
-		storage.out(fileHandler, file);
-		fileHandler->close();
-		delete fileHandler;
+	    CryptoHandler::DecryptFile(privateKeyPath, storagePath, tempFile);
+		Storage storage;
+
+		storage.open(tempFile);
+		QStringList files = storage.getNames();
+		for each (QString file in files)
+		{
+			QFile* fileHandler = new QFile(folderPath + "\\" + file);
+			fileHandler->open(QIODevice::ReadOnly);
+			storage.out(fileHandler, file);
+			fileHandler->close();
+			delete fileHandler;
+		}
+		storage.close();
+		QFile::remove(tempFile);
 	}
-	storage.close();
-	QFile::remove(tempFile);
-	QMessageBox msgBox;
-	msgBox.setText("Расшифрованно");
-	msgBox.setInformativeText("Расшифрованно хранилище");
-	msgBox.setStandardButtons(QMessageBox::Ok);
-	msgBox.exec();
+	else
+	{
+		QMessageBox msgBox;
+		msgBox.setText("Error");
+		msgBox.setInformativeText("Path can't be empty");
+		msgBox.setStandardButtons(QMessageBox::Ok);
+		msgBox.exec();
+	}
 }
 
 void SecureDisk::generateKeys()

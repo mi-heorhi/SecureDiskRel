@@ -1,5 +1,7 @@
 #include "generatekey.h"
 
+#include <QMessageBox>
+
 GenerateKey::GenerateKey(QWidget *parent)
 	: QDialog(parent)
 {
@@ -43,15 +45,26 @@ void GenerateKey::accept()
 {
 	AutoSeededRandomPool rnd;
 	QString path = ui.keyPathLineEdit->text();
-	RSAES_OAEP_SHA_Decryptor rsaPrivate;
+	if (!path.isEmpty())
+	{
+		RSAES_OAEP_SHA_Decryptor rsaPrivate;
 
-	rsaPrivate.AccessKey().GenerateRandomWithKeySize(rnd, 1024);
-	
+		rsaPrivate.AccessKey().GenerateRandomWithKeySize(rnd, 1024);
 
-	RSAES_OAEP_SHA_Encryptor rsaPublic(rsaPrivate);
-	SavePrivateKey(path + QString("\\") + QString(PRIVATE_KEY), rsaPrivate.AccessKey());
-	SavePublicKey(path + QString("\\") + QString(PUBLIC_KEY), rsaPublic.AccessKey());
-	close();
+
+		RSAES_OAEP_SHA_Encryptor rsaPublic(rsaPrivate);
+		SavePrivateKey(path + QString("\\") + QString(PRIVATE_KEY), rsaPrivate.AccessKey());
+		SavePublicKey(path + QString("\\") + QString(PUBLIC_KEY), rsaPublic.AccessKey());
+		close();
+	}
+	else
+	{
+		QMessageBox msgBox;
+		msgBox.setText("Error");
+		msgBox.setInformativeText("Path can't be empty");
+		msgBox.setStandardButtons(QMessageBox::Ok);
+		msgBox.exec();
+	}
 }
 
 void GenerateKey::SaveHex(const QString& filename, const BufferedTransformation& bt)
